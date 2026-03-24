@@ -10,6 +10,9 @@ pub fn get_projects() -> Result<Vec<scanner::Project>, String> {
 
 #[tauri::command]
 pub fn launch_project(path: String, mode: Option<String>) -> Result<(), String> {
+    if !std::path::Path::new(&path).is_dir() {
+        return Err("Invalid project path".to_string());
+    }
     let mut cfg = config::load_config();
     let flags = match mode.as_deref() {
         Some("continue") => {
