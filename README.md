@@ -8,6 +8,7 @@ Lightweight menu bar app (~8MB) built with Tauri v2. No Electron, no bloat.
 
 - **Auto-discovers projects** — scans directories for `.git`, `CLAUDE.md`, `package.json`, `pyproject.toml`, `Cargo.toml`
 - **One-click launch** — opens your terminal with `claude` and your configured flags
+- **Resume sessions** — resume any previous Claude session with `--resume` (Claude's session picker)
 - **Menu bar app** — lives in your system tray, launch projects without opening a window
 - **Claude metadata** — shows session count, message count, and last active time per project (read from `~/.claude/`)
 - **Pin favorites** — star projects to keep them at the top
@@ -22,7 +23,7 @@ Lightweight menu bar app (~8MB) built with Tauri v2. No Electron, no bloat.
 
 ## Install
 
-Download the latest release for your platform from [Releases](https://github.com/cc-launcher/cc-launcher/releases).
+Download the latest release for your platform from [Releases](https://github.com/sohil404/cc-launcher/releases).
 
 | Platform | Download |
 |----------|----------|
@@ -30,6 +31,25 @@ Download the latest release for your platform from [Releases](https://github.com
 | macOS (Intel) | `.dmg` |
 | Linux | `.AppImage` / `.deb` |
 | Windows | `.msi` / `.exe` |
+
+## Getting Started
+
+1. **Open the app** — it starts in your menu bar (look for the CC icon in the system tray)
+2. **Click the tray icon** — you'll see your pinned and recent projects listed
+3. **Click "Show Window"** — opens the full UI with search, settings, and all projects
+4. **Add scan directories** — go to Settings and add paths where your projects live (e.g., `~/Projects`)
+5. **Launch a project** — click any project to open Claude Code in your terminal
+6. **Pin favorites** — click the star icon on projects you use most
+
+### Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `⌘K` / `Ctrl+K` | Focus search |
+| `↑` `↓` | Navigate projects |
+| `Enter` | Launch selected project |
+| `Escape` | Clear search |
+| `⌘,` / `Ctrl+,` | Open settings |
 
 ## Terminal Support
 
@@ -51,7 +71,7 @@ Auto-detect picks the best available, or choose manually in settings.
 ### Build
 
 ```bash
-git clone https://github.com/cc-launcher/cc-launcher.git
+git clone https://github.com/sohil404/cc-launcher.git
 cd cc-launcher
 cargo tauri build
 ```
@@ -95,7 +115,23 @@ Config is stored at `~/.cc-launcher/config.json`:
 1. Scans configured directories for project markers (`.git`, `CLAUDE.md`, `package.json`, etc.)
 2. Reads `~/.claude/history.jsonl` and `~/.claude/projects/` for per-project Claude metadata
 3. Lists projects sorted by: pinned → recently active → alphabetical
-4. Click "Launch" → opens your terminal running `cd <project> && claude <flags>`
+4. Click "open" → opens your terminal running `cd <project> && claude <flags>`
+5. Click "resume" → opens terminal with `claude --resume` to pick from previous sessions
+
+## Contributing
+
+PRs welcome. The codebase is small:
+
+```
+src/                    # Frontend (vanilla HTML/CSS/JS)
+src-tauri/src/
+  ├── lib.rs            # Tauri setup, tray menu
+  ├── commands.rs       # Tauri commands (frontend ↔ backend)
+  ├── scanner.rs        # Project discovery
+  ├── config.rs         # Config persistence
+  ├── launcher.rs       # Terminal spawning (cross-platform)
+  └── claude_meta.rs    # Claude session metadata reader
+```
 
 ## License
 
